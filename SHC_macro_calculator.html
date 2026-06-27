@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHC Macro Calculator</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0f14;
+    color: #ffffff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    padding: 48px 20px 80px;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .logo {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    color: #ffffff;
+    margin-bottom: 2px;
+  }
+
+  .logo-sub {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    color: #5BA3C9;
+    margin-bottom: 32px;
+  }
+
+  .header-label {
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #5BA3C9;
+    margin-bottom: 10px;
+  }
+
+  .header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .header p {
+    font-size: 14px;
+    color: #8899aa;
+    line-height: 1.6;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .calculator {
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  .form-card {
+    background: #12202d;
+    border: 1px solid #1a2a38;
+    border-radius: 4px;
+    padding: 32px;
+    margin-bottom: 24px;
+  }
+
+  .form-section-label {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #5BA3C9;
+    margin-bottom: 20px;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .form-group.full {
+    grid-column: 1 / -1;
+  }
+
+  label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #8899aa;
+  }
+
+  input, select {
+    background: #0a0f14;
+    border: 1px solid #1a2a38;
+    border-radius: 2px;
+    color: #ffffff;
+    font-size: 14px;
+    padding: 12px 14px;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  input:focus, select:focus {
+    border-color: #5BA3C9;
+  }
+
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238899aa' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+
+  select option {
+    background: #12202d;
+    color: #ffffff;
+  }
+
+  .sex-toggle {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .sex-btn {
+    background: #0a0f14;
+    border: 1px solid #1a2a38;
+    border-radius: 2px;
+    color: #8899aa;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+
+  .sex-btn.active {
+    background: #5BA3C9;
+    border-color: #5BA3C9;
+    color: #0a0f14;
+  }
+
+  .calc-btn {
+    width: 100%;
+    padding: 16px;
+    background: #5BA3C9;
+    color: #0a0f14;
+    border: none;
+    border-radius: 2px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 8px;
+  }
+
+  .calc-btn:hover { background: #ffffff; }
+
+  /* Results */
+  .results {
+    display: none;
+  }
+
+  .results.visible {
+    display: block;
+  }
+
+  .results-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .results-label {
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #5BA3C9;
+    margin-bottom: 8px;
+  }
+
+  .results-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #ffffff;
+  }
+
+  .results-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .result-card {
+    background: #12202d;
+    border: 1px solid #1a2a38;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .result-card-header {
+    padding: 14px 20px;
+    border-bottom: 1px solid #1a2a38;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .result-card-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .result-card-title.maintain { color: #8899aa; }
+  .result-card-title.cut { color: #5BA3C9; }
+  .result-card-title.bulk { color: #c8a96e; }
+
+  .result-card-subtitle {
+    font-size: 10px;
+    color: #8899aa;
+  }
+
+  .result-card-body {
+    padding: 16px 20px;
+  }
+
+  .calories-display {
+    font-size: 32px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+
+  .calories-label {
+    font-size: 10px;
+    color: #8899aa;
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+  }
+
+  .macros-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .macro-item {
+    background: #0a0f14;
+    border-radius: 2px;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .macro-value {
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffffff;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .macro-value.cut { color: #5BA3C9; }
+  .macro-value.bulk { color: #c8a96e; }
+
+  .macro-label {
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #8899aa;
+  }
+
+  /* CTA after results */
+  .results-cta {
+    background: #12202d;
+    border: 1px solid #1a2a38;
+    border-radius: 4px;
+    padding: 24px;
+    text-align: center;
+    margin-top: 24px;
+  }
+
+  .results-cta-label {
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #5BA3C9;
+    margin-bottom: 8px;
+  }
+
+  .results-cta h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 6px;
+  }
+
+  .results-cta p {
+    font-size: 12px;
+    color: #8899aa;
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+
+  .cta-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .cta-btn-silver {
+    padding: 12px;
+    background: #5BA3C9;
+    color: #0a0f14;
+    border: none;
+    border-radius: 2px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .cta-btn-gold {
+    padding: 12px;
+    background: #c8a96e;
+    color: #0a0f14;
+    border: none;
+    border-radius: 2px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .back-btn {
+    display: block;
+    text-align: center;
+    margin-top: 12px;
+    font-size: 10px;
+    color: #8899aa;
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    text-decoration: underline;
+  }
+
+  .error {
+    font-size: 11px;
+    color: #ff6b6b;
+    margin-top: 4px;
+    display: none;
+  }
+
+  .divider {
+    height: 1px;
+    background: #1a2a38;
+    margin: 24px 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">SNIPERS</div>
+  <div class="logo-sub">HEALTH CLUB</div>
+  <div class="header-label">Bronze — Free Tool</div>
+  <h1>Your Macro Blueprint</h1>
+  <p>Enter your details below and get your personalised calorie and macro targets in seconds.</p>
+</div>
+
+<div class="calculator">
+
+  <!-- Input Form -->
+  <div class="form-card" id="formCard">
+    <div class="form-section-label">Your Details</div>
+    <div class="form-grid">
+
+      <div class="form-group full">
+        <label>Sex</label>
+        <div class="sex-toggle">
+          <div class="sex-btn active" id="btnMale" onclick="setSex('male')">Male</div>
+          <div class="sex-btn" id="btnFemale" onclick="setSex('female')">Female</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Age</label>
+        <input type="number" id="age" placeholder="25" min="16" max="80">
+      </div>
+
+      <div class="form-group">
+        <label>Weight (kg)</label>
+        <input type="number" id="weight" placeholder="75" min="40" max="200">
+      </div>
+
+      <div class="form-group">
+        <label>Height (cm)</label>
+        <input type="number" id="height" placeholder="175" min="140" max="220">
+      </div>
+
+      <div class="form-group">
+        <label>Activity Level</label>
+        <select id="activity">
+          <option value="">Select...</option>
+          <option value="1.2">Sedentary (desk job, no exercise)</option>
+          <option value="1.375">Lightly active (1–3 days/week)</option>
+          <option value="1.55">Moderately active (3–5 days/week)</option>
+          <option value="1.725">Very active (6–7 days/week)</option>
+          <option value="1.9">Extremely active (2x/day training)</option>
+        </select>
+      </div>
+
+      <div class="form-group full">
+        <label>Your Goal</label>
+        <select id="goal">
+          <option value="">Select...</option>
+          <option value="cut">Lose fat (Cut)</option>
+          <option value="maintain">Maintain weight</option>
+          <option value="bulk">Build muscle (Bulk)</option>
+        </select>
+      </div>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <button class="calc-btn" onclick="calculate()">Calculate My Macros →</button>
+    <div class="error" id="errorMsg">Please fill in all fields before calculating.</div>
+  </div>
+
+  <!-- Results -->
+  <div class="results" id="results">
+
+    <div class="results-header">
+      <div class="results-label">Your Macro Blueprint</div>
+      <div class="results-title" id="resultsName">Here are your targets</div>
+    </div>
+
+    <div class="results-grid">
+
+      <!-- Maintenance -->
+      <div class="result-card">
+        <div class="result-card-header">
+          <span class="result-card-title maintain">Maintenance</span>
+          <span class="result-card-subtitle">Your baseline</span>
+        </div>
+        <div class="result-card-body">
+          <div class="calories-display" id="maintainCals">—</div>
+          <div class="calories-label">CALORIES / DAY</div>
+          <div class="macros-row">
+            <div class="macro-item">
+              <span class="macro-value" id="maintainProtein">—</span>
+              <span class="macro-label">Protein (g)</span>
+            </div>
+            <div class="macro-item">
+              <span class="macro-value" id="maintainCarbs">—</span>
+              <span class="macro-label">Carbs (g)</span>
+            </div>
+            <div class="macro-item">
+              <span class="macro-value" id="maintainFat">—</span>
+              <span class="macro-label">Fat (g)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cut -->
+      <div class="result-card">
+        <div class="result-card-header">
+          <span class="result-card-title cut">Cut — Lose Fat</span>
+          <span class="result-card-subtitle">~500 kcal deficit</span>
+        </div>
+        <div class="result-card-body">
+          <div class="calories-display" id="cutCals">—</div>
+          <div class="calories-label">CALORIES / DAY</div>
+          <div class="macros-row">
+            <div class="macro-item">
+              <span class="macro-value cut" id="cutProtein">—</span>
+              <span class="macro-label">Protein (g)</span>
+            </div>
+            <div class="macro-item">
+              <span class="macro-value cut" id="cutCarbs">—</span>
+              <span class="macro-label">Carbs (g)</span>
+            </div>
+            <div class="macro-item">
+              <span class="macro-value cut" id="cutFat">—</span>
+              <span class="macro-label">Fat (g)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bulk -->
+      <div class="result-card">
+        <div class="result-card-header">
+          <span class="result-card-title bulk">Bulk — Build Muscle</span>
+          <span class="result-card-subtitle">~300 kcal surplus</span>
+        </div>
+        <div class="result-card-body">
+          <div class="calories-display" id="bulkCals">—</div>
+          <div class="calories-label">CALORIES / DAY</div>
+          <div class="macros-row">
+            <div class="macro-item">
+              <span class="macro-value bulk" id="bulkProtein">—</span>
+              <span class="macro-label">Protein (g)</span>
+            </div>
+            <div class="macro-item">
+              <span class="macro-value bulk" id="bulkCarbs">—</span>
+              <span class="macro-label">Carbs (g)</span>
+            </div>
+            <div class="macro-item">
+              <span class="macro-value bulk" id="bulkFat">—</span>
+              <span class="macro-label">Fat (g)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CTA -->
+    <div class="results-cta">
+      <div class="results-cta-label">Ready for the full system?</div>
+      <h3>Turn your targets into a full training plan</h3>
+      <p>Your macros are just the start. SHC builds your complete training and nutrition blueprint — personalised, structured, and adjusted as you progress.</p>
+      <div class="cta-buttons">
+        <button class="cta-btn-silver" onclick="window.location.href='#'">Join Silver — £49/mo</button>
+        <button class="cta-btn-gold" onclick="window.location.href='#'">Join Gold — £119/mo</button>
+      </div>
+    </div>
+
+    <span class="back-btn" onclick="resetCalc()">← Recalculate</span>
+
+  </div>
+
+</div>
+
+<script>
+  let selectedSex = 'male';
+
+  function setSex(sex) {
+    selectedSex = sex;
+    document.getElementById('btnMale').classList.toggle('active', sex === 'male');
+    document.getElementById('btnFemale').classList.toggle('active', sex === 'female');
+  }
+
+  function calculate() {
+    const age = parseFloat(document.getElementById('age').value);
+    const weight = parseFloat(document.getElementById('weight').value);
+    const height = parseFloat(document.getElementById('height').value);
+    const activity = parseFloat(document.getElementById('activity').value);
+    const goal = document.getElementById('goal').value;
+    const errorMsg = document.getElementById('errorMsg');
+
+    if (!age || !weight || !height || !activity || !goal) {
+      errorMsg.style.display = 'block';
+      return;
+    }
+    errorMsg.style.display = 'none';
+
+    // Mifflin-St Jeor BMR
+    let bmr;
+    if (selectedSex === 'male') {
+      bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+    } else {
+      bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+    }
+
+    const tdee = Math.round(bmr * activity);
+    const cutCals = tdee - 500;
+    const bulkCals = tdee + 300;
+
+    // Macros — maintenance (2.2g/kg protein, 25% fat, carbs fill remainder)
+    const mProtein = Math.round(weight * 2.2);
+    const mFat = Math.round((tdee * 0.25) / 9);
+    const mCarbs = Math.max(Math.round((tdee - (mProtein * 4) - (mFat * 9)) / 4), 50);
+
+    // Macros — cut (2.4g/kg protein, 25% fat, carbs fill remainder, min 50g)
+    const cProtein = Math.round(weight * 2.4);
+    const cFat = Math.round((cutCals * 0.25) / 9);
+    const cCarbs = Math.max(Math.round((cutCals - (cProtein * 4) - (cFat * 9)) / 4), 50);
+
+    // Macros — bulk (2.5g/kg protein, 30% fat for hormonal support, carbs fill remainder)
+    const bProtein = Math.round(weight * 2.5);
+    const bFat = Math.round((bulkCals * 0.30) / 9);
+    const bCarbs = Math.max(Math.round((bulkCals - (bProtein * 4) - (bFat * 9)) / 4), 50);
+
+    // Populate results
+    document.getElementById('maintainCals').textContent = tdee.toLocaleString();
+    document.getElementById('maintainProtein').textContent = mProtein + 'g';
+    document.getElementById('maintainCarbs').textContent = mCarbs + 'g';
+    document.getElementById('maintainFat').textContent = mFat + 'g';
+
+    document.getElementById('cutCals').textContent = cutCals.toLocaleString();
+    document.getElementById('cutProtein').textContent = cProtein + 'g';
+    document.getElementById('cutCarbs').textContent = cCarbs + 'g';
+    document.getElementById('cutFat').textContent = cFat + 'g';
+
+    document.getElementById('bulkCals').textContent = bulkCals.toLocaleString();
+    document.getElementById('bulkProtein').textContent = bProtein + 'g';
+    document.getElementById('bulkCarbs').textContent = bCarbs + 'g';
+    document.getElementById('bulkFat').textContent = bFat + 'g';
+
+    // Goal highlight
+    const goalLabels = { cut: 'Your Cut Targets', maintain: 'Your Maintenance Targets', bulk: 'Your Bulk Targets' };
+    document.getElementById('resultsName').textContent = goalLabels[goal];
+
+    // Show results
+    document.getElementById('formCard').style.display = 'none';
+    document.getElementById('results').classList.add('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function resetCalc() {
+    document.getElementById('formCard').style.display = 'block';
+    document.getElementById('results').classList.remove('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
