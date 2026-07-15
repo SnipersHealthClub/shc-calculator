@@ -105,6 +105,12 @@
     color: #8899aa;
   }
 
+  label .optional-tag {
+    color: #5BA3C9;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+  }
+
   input, select {
     background: #0a0f14;
     border: 1px solid #1a2a38;
@@ -160,6 +166,69 @@
     background: #5BA3C9;
     border-color: #5BA3C9;
     color: #0a0f14;
+  }
+
+  /* Pace pills (Steady / Standard / Aggressive) */
+  .pace-group {
+    display: none;
+  }
+
+  .pace-group.visible {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .pace-toggle {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+  }
+
+  .pace-btn {
+    background: #0a0f14;
+    border: 1px solid #1a2a38;
+    border-radius: 2px;
+    color: #8899aa;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: 12px 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  .pace-btn .pace-cals {
+    display: block;
+    font-size: 9px;
+    font-weight: 600;
+    color: #5f7284;
+    letter-spacing: 0.05em;
+    margin-top: 2px;
+  }
+
+  .pace-btn.active {
+    background: #5BA3C9;
+    border-color: #5BA3C9;
+    color: #0a0f14;
+  }
+
+  .pace-btn.active .pace-cals {
+    color: #0a0f14;
+    opacity: 0.75;
+  }
+
+  .pace-btn.bulk-active {
+    background: #c8a96e;
+    border-color: #c8a96e;
+    color: #0a0f14;
+  }
+
+  .pace-btn.bulk-active .pace-cals {
+    color: #0a0f14;
+    opacity: 0.75;
   }
 
   .calc-btn {
@@ -295,6 +364,67 @@
     color: #8899aa;
   }
 
+  /* Weight projection block */
+  .projection {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #1a2a38;
+  }
+
+  .projection-label {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #5BA3C9;
+    margin-bottom: 10px;
+  }
+
+  .projection-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .projection-item {
+    background: #0a0f14;
+    border-radius: 2px;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .projection-value {
+    font-size: 16px;
+    font-weight: 700;
+    color: #ffffff;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .projection-value.cut { color: #5BA3C9; }
+  .projection-value.bulk { color: #c8a96e; }
+
+  .projection-sublabel {
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #8899aa;
+  }
+
+  .projection-note {
+    font-size: 10px;
+    color: #5f7284;
+    line-height: 1.5;
+  }
+
+  /* Pace switch on results screen */
+  .results-pace-toggle {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
   /* CTA after results */
   .results-cta {
     background: #12202d;
@@ -425,6 +555,11 @@
       </div>
 
       <div class="form-group">
+        <label>Body Fat % <span class="optional-tag">(Optional)</span></label>
+        <input type="number" id="bodyfat" placeholder="e.g. 18" min="5" max="60">
+      </div>
+
+      <div class="form-group full">
         <label>Activity Level</label>
         <select id="activity">
           <option value="">Select...</option>
@@ -438,12 +573,21 @@
 
       <div class="form-group full">
         <label>Your Goal</label>
-        <select id="goal">
+        <select id="goal" onchange="onGoalChange()">
           <option value="">Select...</option>
           <option value="cut">Lose fat (Cut)</option>
           <option value="maintain">Maintain weight</option>
           <option value="bulk">Build muscle (Bulk)</option>
         </select>
+      </div>
+
+      <div class="form-group full pace-group" id="paceGroup">
+        <label id="paceLabel">Pace</label>
+        <div class="pace-toggle" id="paceToggle">
+          <div class="pace-btn" data-pace="steady" onclick="setPace('steady')">Steady<span class="pace-cals" id="paceCalsSteady">300 kcal</span></div>
+          <div class="pace-btn" data-pace="standard" onclick="setPace('standard')">Standard<span class="pace-cals" id="paceCalsStandard">400 kcal</span></div>
+          <div class="pace-btn" data-pace="aggressive" onclick="setPace('aggressive')">Aggressive<span class="pace-cals" id="paceCalsAggressive">500 kcal</span></div>
+        </div>
       </div>
 
     </div>
@@ -462,86 +606,15 @@
       <div class="results-title" id="resultsName">Here are your targets</div>
     </div>
 
-    <div class="results-grid">
+    <!-- Pace switch, only shown for cut/bulk -->
+    <div class="pace-toggle results-pace-toggle" id="resultsPaceToggle" style="display:none;">
+      <div class="pace-btn" data-pace="steady" onclick="switchResultsPace('steady')">Steady<span class="pace-cals" id="rPaceCalsSteady">300 kcal</span></div>
+      <div class="pace-btn" data-pace="standard" onclick="switchResultsPace('standard')">Standard<span class="pace-cals" id="rPaceCalsStandard">400 kcal</span></div>
+      <div class="pace-btn" data-pace="aggressive" onclick="switchResultsPace('aggressive')">Aggressive<span class="pace-cals" id="rPaceCalsAggressive">500 kcal</span></div>
+    </div>
 
-      <!-- Maintenance -->
-      <div class="result-card">
-        <div class="result-card-header">
-          <span class="result-card-title maintain">Maintenance</span>
-          <span class="result-card-subtitle">Your baseline</span>
-        </div>
-        <div class="result-card-body">
-          <div class="calories-display" id="maintainCals">—</div>
-          <div class="calories-label">CALORIES / DAY</div>
-          <div class="macros-row">
-            <div class="macro-item">
-              <span class="macro-value" id="maintainProtein">—</span>
-              <span class="macro-label">Protein (g)</span>
-            </div>
-            <div class="macro-item">
-              <span class="macro-value" id="maintainCarbs">—</span>
-              <span class="macro-label">Carbs (g)</span>
-            </div>
-            <div class="macro-item">
-              <span class="macro-value" id="maintainFat">—</span>
-              <span class="macro-label">Fat (g)</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Cut -->
-      <div class="result-card">
-        <div class="result-card-header">
-          <span class="result-card-title cut">Cut — Lose Fat</span>
-          <span class="result-card-subtitle">~500 kcal deficit</span>
-        </div>
-        <div class="result-card-body">
-          <div class="calories-display" id="cutCals">—</div>
-          <div class="calories-label">CALORIES / DAY</div>
-          <div class="macros-row">
-            <div class="macro-item">
-              <span class="macro-value cut" id="cutProtein">—</span>
-              <span class="macro-label">Protein (g)</span>
-            </div>
-            <div class="macro-item">
-              <span class="macro-value cut" id="cutCarbs">—</span>
-              <span class="macro-label">Carbs (g)</span>
-            </div>
-            <div class="macro-item">
-              <span class="macro-value cut" id="cutFat">—</span>
-              <span class="macro-label">Fat (g)</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Bulk -->
-      <div class="result-card">
-        <div class="result-card-header">
-          <span class="result-card-title bulk">Bulk — Build Muscle</span>
-          <span class="result-card-subtitle">~300 kcal surplus</span>
-        </div>
-        <div class="result-card-body">
-          <div class="calories-display" id="bulkCals">—</div>
-          <div class="calories-label">CALORIES / DAY</div>
-          <div class="macros-row">
-            <div class="macro-item">
-              <span class="macro-value bulk" id="bulkProtein">—</span>
-              <span class="macro-label">Protein (g)</span>
-            </div>
-            <div class="macro-item">
-              <span class="macro-value bulk" id="bulkCarbs">—</span>
-              <span class="macro-label">Carbs (g)</span>
-            </div>
-            <div class="macro-item">
-              <span class="macro-value bulk" id="bulkFat">—</span>
-              <span class="macro-label">Fat (g)</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
+    <div class="results-grid" id="resultsGrid">
+      <!-- Single result card is injected here by JS, based on selected goal -->
     </div>
 
     <!-- CTA -->
@@ -563,6 +636,11 @@
 
 <script>
   let selectedSex = 'male';
+  let selectedPace = 'standard';       // used on the input form
+  let resultsPace = 'standard';        // used on the results screen (can be switched live)
+  let lastInputs = null;               // cached inputs so results can recompute on pace switch
+
+  const PACE_CALS = { steady: 300, standard: 400, aggressive: 500 };
 
   function setSex(sex) {
     selectedSex = sex;
@@ -570,13 +648,59 @@
     document.getElementById('btnFemale').classList.toggle('active', sex === 'female');
   }
 
+  function onGoalChange() {
+    const goal = document.getElementById('goal').value;
+    const paceGroup = document.getElementById('paceGroup');
+    const paceLabel = document.getElementById('paceLabel');
+
+    if (goal === 'cut' || goal === 'bulk') {
+      paceGroup.classList.add('visible');
+      paceLabel.textContent = goal === 'cut' ? 'Pace (Deficit)' : 'Pace (Surplus)';
+      styleActivePaceButtons(document.getElementById('paceToggle'), goal);
+    } else {
+      paceGroup.classList.remove('visible');
+    }
+  }
+
+  function setPace(pace) {
+    selectedPace = pace;
+    const goal = document.getElementById('goal').value;
+    styleActivePaceButtons(document.getElementById('paceToggle'), goal);
+  }
+
+  function styleActivePaceButtons(container, goal) {
+    const activeClass = goal === 'bulk' ? 'bulk-active' : 'active';
+    container.querySelectorAll('.pace-btn').forEach(btn => {
+      const isActive = btn.dataset.pace === (container.id === 'paceToggle' ? selectedPace : resultsPace);
+      btn.classList.remove('active', 'bulk-active');
+      if (isActive) btn.classList.add(activeClass);
+    });
+  }
+
+  // kcal required per kg of bodyweight change — adjusted for leanness when body fat % is known
+  function kcalPerKg(sex, bodyFat) {
+    if (!bodyFat) return 7700; // standard estimate
+    if (sex === 'male') {
+      if (bodyFat < 12) return 6500;
+      if (bodyFat <= 20) return 7000;
+      return 7700;
+    } else {
+      if (bodyFat < 20) return 6500;
+      if (bodyFat <= 30) return 7000;
+      return 7700;
+    }
+  }
+
   function calculate() {
     const age = parseFloat(document.getElementById('age').value);
     const weight = parseFloat(document.getElementById('weight').value);
     const height = parseFloat(document.getElementById('height').value);
+    const bodyfat = parseFloat(document.getElementById('bodyfat').value) || null;
     const activity = parseFloat(document.getElementById('activity').value);
     const goal = document.getElementById('goal').value;
     const errorMsg = document.getElementById('errorMsg');
+
+    const needsPace = (goal === 'cut' || goal === 'bulk');
 
     if (!age || !weight || !height || !activity || !goal) {
       errorMsg.style.display = 'block';
@@ -584,57 +708,137 @@
     }
     errorMsg.style.display = 'none';
 
-    // Mifflin-St Jeor BMR
+    lastInputs = { age, weight, height, bodyfat, activity, goal, sex: selectedSex };
+    resultsPace = needsPace ? selectedPace : 'standard';
+
+    renderResults();
+
+    document.getElementById('formCard').style.display = 'none';
+    document.getElementById('results').classList.add('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function switchResultsPace(pace) {
+    resultsPace = pace;
+    styleActivePaceButtons(document.getElementById('resultsPaceToggle'), lastInputs.goal);
+    renderResults();
+  }
+
+  function renderResults() {
+    const { age, weight, height, bodyfat, activity, goal, sex } = lastInputs;
+
+    // BMR — Katch-McArdle when body fat % is known (more accurate), else Mifflin-St Jeor
     let bmr;
-    if (selectedSex === 'male') {
+    if (bodyfat) {
+      const lbm = weight * (1 - bodyfat / 100);
+      bmr = 370 + 21.6 * lbm;
+    } else if (sex === 'male') {
       bmr = 10 * weight + 6.25 * height - 5 * age + 5;
     } else {
       bmr = 10 * weight + 6.25 * height - 5 * age - 161;
     }
 
     const tdee = Math.round(bmr * activity);
-    const cutCals = tdee - 500;
-    const bulkCals = tdee + 300;
+    const needsPace = (goal === 'cut' || goal === 'bulk');
+    const paceCalAmount = PACE_CALS[resultsPace];
 
-    // Macros — maintenance (2.2g/kg protein, 25% fat, carbs fill remainder)
-    const mProtein = Math.round(weight * 2.2);
-    const mFat = Math.round((tdee * 0.25) / 9);
-    const mCarbs = Math.max(Math.round((tdee - (mProtein * 4) - (mFat * 9)) / 4), 50);
+    const resultsPaceToggle = document.getElementById('resultsPaceToggle');
+    resultsPaceToggle.style.display = needsPace ? 'grid' : 'none';
+    if (needsPace) {
+      styleActivePaceButtons(resultsPaceToggle, goal);
+    }
 
-    // Macros — cut (2.4g/kg protein, 25% fat, carbs fill remainder, min 50g)
-    const cProtein = Math.round(weight * 2.4);
-    const cFat = Math.round((cutCals * 0.25) / 9);
-    const cCarbs = Math.max(Math.round((cutCals - (cProtein * 4) - (cFat * 9)) / 4), 50);
-
-    // Macros — bulk (2.5g/kg protein, 30% fat for hormonal support, carbs fill remainder)
-    const bProtein = Math.round(weight * 2.5);
-    const bFat = Math.round((bulkCals * 0.30) / 9);
-    const bCarbs = Math.max(Math.round((bulkCals - (bProtein * 4) - (bFat * 9)) / 4), 50);
-
-    // Populate results
-    document.getElementById('maintainCals').textContent = tdee.toLocaleString();
-    document.getElementById('maintainProtein').textContent = mProtein + 'g';
-    document.getElementById('maintainCarbs').textContent = mCarbs + 'g';
-    document.getElementById('maintainFat').textContent = mFat + 'g';
-
-    document.getElementById('cutCals').textContent = cutCals.toLocaleString();
-    document.getElementById('cutProtein').textContent = cProtein + 'g';
-    document.getElementById('cutCarbs').textContent = cCarbs + 'g';
-    document.getElementById('cutFat').textContent = cFat + 'g';
-
-    document.getElementById('bulkCals').textContent = bulkCals.toLocaleString();
-    document.getElementById('bulkProtein').textContent = bProtein + 'g';
-    document.getElementById('bulkCarbs').textContent = bCarbs + 'g';
-    document.getElementById('bulkFat').textContent = bFat + 'g';
-
-    // Goal highlight
     const goalLabels = { cut: 'Your Cut Targets', maintain: 'Your Maintenance Targets', bulk: 'Your Bulk Targets' };
     document.getElementById('resultsName').textContent = goalLabels[goal];
 
-    // Show results
-    document.getElementById('formCard').style.display = 'none';
-    document.getElementById('results').classList.add('visible');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    let targetCals, protein, fat, carbs, cardClass, cardTitle, cardSubtitle;
+
+    if (goal === 'maintain') {
+      targetCals = tdee;
+      protein = Math.round(weight * 2.2);
+      fat = Math.round((targetCals * 0.25) / 9);
+      carbs = Math.max(Math.round((targetCals - protein * 4 - fat * 9) / 4), 50);
+      cardClass = 'maintain';
+      cardTitle = 'Maintenance';
+      cardSubtitle = 'Your baseline';
+    } else if (goal === 'cut') {
+      targetCals = tdee - paceCalAmount;
+      protein = Math.round(weight * 2.4);
+      fat = Math.round((targetCals * 0.25) / 9);
+      carbs = Math.max(Math.round((targetCals - protein * 4 - fat * 9) / 4), 50);
+      cardClass = 'cut';
+      cardTitle = 'Cut — Lose Fat';
+      cardSubtitle = `−${paceCalAmount} kcal deficit · ${capitalize(resultsPace)}`;
+    } else {
+      targetCals = tdee + paceCalAmount;
+      protein = Math.round(weight * 2.5);
+      fat = Math.round((targetCals * 0.30) / 9);
+      carbs = Math.max(Math.round((targetCals - protein * 4 - fat * 9) / 4), 50);
+      cardClass = 'bulk';
+      cardTitle = 'Bulk — Build Muscle';
+      cardSubtitle = `+${paceCalAmount} kcal surplus · ${capitalize(resultsPace)}`;
+    }
+
+    let projectionHtml = '';
+    if (needsPace) {
+      const factor = kcalPerKg(sex, bodyfat);
+      const weeklyKg = (paceCalAmount * 7) / factor;
+      const monthlyKg = weeklyKg * 4.345;
+      const direction = goal === 'cut' ? 'loss' : 'gain';
+      const sign = goal === 'cut' ? '−' : '+';
+      const noteTissue = bodyfat
+        ? 'Estimate adjusted using your body fat % for a more tailored rate.'
+        : 'General estimate. Add your body fat % above for a more tailored rate.';
+
+      projectionHtml = `
+        <div class="projection">
+          <div class="projection-label">Projected Weight ${direction === 'loss' ? 'Loss' : 'Gain'}</div>
+          <div class="projection-row">
+            <div class="projection-item">
+              <span class="projection-value ${cardClass}">${sign}${weeklyKg.toFixed(2)} kg</span>
+              <span class="projection-sublabel">Per Week</span>
+            </div>
+            <div class="projection-item">
+              <span class="projection-value ${cardClass}">${sign}${monthlyKg.toFixed(1)} kg</span>
+              <span class="projection-sublabel">Per 4 Weeks</span>
+            </div>
+          </div>
+          <div class="projection-note">${noteTissue} Actual results vary with training, sleep, stress and consistency.</div>
+        </div>`;
+    }
+
+    const cardHtml = `
+      <div class="result-card">
+        <div class="result-card-header">
+          <span class="result-card-title ${cardClass}">${cardTitle}</span>
+          <span class="result-card-subtitle">${cardSubtitle}</span>
+        </div>
+        <div class="result-card-body">
+          <div class="calories-display">${targetCals.toLocaleString()}</div>
+          <div class="calories-label">CALORIES / DAY</div>
+          <div class="macros-row">
+            <div class="macro-item">
+              <span class="macro-value ${cardClass !== 'maintain' ? cardClass : ''}">${protein}g</span>
+              <span class="macro-label">Protein (g)</span>
+            </div>
+            <div class="macro-item">
+              <span class="macro-value ${cardClass !== 'maintain' ? cardClass : ''}">${carbs}g</span>
+              <span class="macro-label">Carbs (g)</span>
+            </div>
+            <div class="macro-item">
+              <span class="macro-value ${cardClass !== 'maintain' ? cardClass : ''}">${fat}g</span>
+              <span class="macro-label">Fat (g)</span>
+            </div>
+          </div>
+          ${projectionHtml}
+        </div>
+      </div>`;
+
+    document.getElementById('resultsGrid').innerHTML = cardHtml;
+  }
+
+  function capitalize(s) {
+    return s.charAt(0).toUpperCase() + s.slice(1);
   }
 
   function resetCalc() {
