@@ -725,9 +725,12 @@
   function submitLead(email, extra) {
     if (!ZAPIER_WEBHOOK_URL || ZAPIER_WEBHOOK_URL.indexOf('REPLACE') !== -1) return;
     try {
+      // Content-Type is deliberately text/plain (not application/json) so this
+      // qualifies as a "simple request" and skips the CORS preflight check —
+      // Zapier's webhook still parses the JSON body correctly either way.
       fetch(ZAPIER_WEBHOOK_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'text/plain' },
         body: JSON.stringify(Object.assign({ email: email, source: 'bronze-calculator' }, extra || {}))
       }).catch(function () { /* silent fail — don't interrupt the user */ });
     } catch (e) { /* silent fail */ }
@@ -897,4 +900,3 @@
  
 </body>
 </html>
- 
