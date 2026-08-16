@@ -6,7 +6,7 @@
 <title>SHC Macro Calculator</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
+ 
   body {
     background: #0a0f14;
     color: #ffffff;
@@ -14,12 +14,12 @@
     min-height: 100vh;
     padding: 48px 20px 80px;
   }
-
+ 
   .header {
     text-align: center;
     margin-bottom: 48px;
   }
-
+ 
   .logo {
     font-size: 13px;
     font-weight: 700;
@@ -27,7 +27,7 @@
     color: #ffffff;
     margin-bottom: 2px;
   }
-
+ 
   .logo-sub {
     font-size: 9px;
     font-weight: 600;
@@ -35,7 +35,7 @@
     color: #5BA3C9;
     margin-bottom: 32px;
   }
-
+ 
   .header-label {
     font-size: 9px;
     letter-spacing: 0.25em;
@@ -43,7 +43,7 @@
     color: #5BA3C9;
     margin-bottom: 10px;
   }
-
+ 
   .header h1 {
     font-size: 28px;
     font-weight: 700;
@@ -51,7 +51,7 @@
     margin-bottom: 8px;
     letter-spacing: -0.01em;
   }
-
+ 
   .header p {
     font-size: 14px;
     color: #8899aa;
@@ -59,12 +59,12 @@
     max-width: 400px;
     margin: 0 auto;
   }
-
+ 
   .calculator {
     max-width: 560px;
     margin: 0 auto;
   }
-
+ 
   .form-card {
     background: #12202d;
     border: 1px solid #1a2a38;
@@ -72,7 +72,7 @@
     padding: 32px;
     margin-bottom: 24px;
   }
-
+ 
   .form-section-label {
     font-size: 9px;
     letter-spacing: 0.2em;
@@ -80,23 +80,23 @@
     color: #5BA3C9;
     margin-bottom: 20px;
   }
-
+ 
   .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
   }
-
+ 
   .form-group {
     display: flex;
     flex-direction: column;
     gap: 6px;
   }
-
+ 
   .form-group.full {
     grid-column: 1 / -1;
   }
-
+ 
   label {
     font-size: 10px;
     font-weight: 600;
@@ -104,13 +104,13 @@
     text-transform: uppercase;
     color: #8899aa;
   }
-
+ 
   label .optional-tag {
     color: #5BA3C9;
     font-weight: 600;
     letter-spacing: 0.1em;
   }
-
+ 
   input, select {
     background: #0a0f14;
     border: 1px solid #1a2a38;
@@ -124,11 +124,11 @@
     -webkit-appearance: none;
     appearance: none;
   }
-
+ 
   input:focus, select:focus {
     border-color: #5BA3C9;
   }
-
+ 
   select {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238899aa' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
@@ -136,18 +136,18 @@
     padding-right: 36px;
     cursor: pointer;
   }
-
+ 
   select option {
     background: #12202d;
     color: #ffffff;
   }
-
+ 
   .sex-toggle {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
   }
-
+ 
   .sex-btn {
     background: #0a0f14;
     border: 1px solid #1a2a38;
@@ -161,30 +161,30 @@
     transition: all 0.2s;
     text-align: center;
   }
-
+ 
   .sex-btn.active {
     background: #5BA3C9;
     border-color: #5BA3C9;
     color: #0a0f14;
   }
-
+ 
   /* Pace pills (Steady / Standard / Aggressive) */
   .pace-group {
     display: none;
   }
-
+ 
   .pace-group.visible {
     display: flex;
     flex-direction: column;
     gap: 6px;
   }
-
+ 
   .pace-toggle {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 8px;
   }
-
+ 
   .pace-btn {
     background: #0a0f14;
     border: 1px solid #1a2a38;
@@ -199,7 +199,7 @@
     text-align: center;
     line-height: 1.5;
   }
-
+ 
   .pace-btn .pace-cals {
     display: block;
     font-size: 9px;
@@ -208,29 +208,29 @@
     letter-spacing: 0.05em;
     margin-top: 2px;
   }
-
+ 
   .pace-btn.active {
     background: #5BA3C9;
     border-color: #5BA3C9;
     color: #0a0f14;
   }
-
+ 
   .pace-btn.active .pace-cals {
     color: #0a0f14;
     opacity: 0.75;
   }
-
+ 
   .pace-btn.bulk-active {
     background: #c8a96e;
     border-color: #c8a96e;
     color: #0a0f14;
   }
-
+ 
   .pace-btn.bulk-active .pace-cals {
     color: #0a0f14;
     opacity: 0.75;
   }
-
+ 
   .calc-btn {
     width: 100%;
     padding: 16px;
@@ -246,23 +246,28 @@
     transition: background 0.2s;
     margin-top: 8px;
   }
-
+ 
   .calc-btn:hover { background: #ffffff; }
-
+ 
+  .calc-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+ 
   /* Results */
   .results {
     display: none;
   }
-
+ 
   .results.visible {
     display: block;
   }
-
+ 
   .results-header {
     text-align: center;
     margin-bottom: 24px;
   }
-
+ 
   .results-label {
     font-size: 9px;
     letter-spacing: 0.25em;
@@ -270,26 +275,26 @@
     color: #5BA3C9;
     margin-bottom: 8px;
   }
-
+ 
   .results-title {
     font-size: 20px;
     font-weight: 600;
     color: #ffffff;
   }
-
+ 
   .results-grid {
     display: flex;
     flex-direction: column;
     gap: 12px;
   }
-
+ 
   .result-card {
     background: #12202d;
     border: 1px solid #1a2a38;
     border-radius: 4px;
     overflow: hidden;
   }
-
+ 
   .result-card-header {
     padding: 14px 20px;
     border-bottom: 1px solid #1a2a38;
@@ -297,27 +302,27 @@
     align-items: center;
     justify-content: space-between;
   }
-
+ 
   .result-card-title {
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.2em;
     text-transform: uppercase;
   }
-
+ 
   .result-card-title.maintain { color: #8899aa; }
   .result-card-title.cut { color: #5BA3C9; }
   .result-card-title.bulk { color: #c8a96e; }
-
+ 
   .result-card-subtitle {
     font-size: 10px;
     color: #8899aa;
   }
-
+ 
   .result-card-body {
     padding: 16px 20px;
   }
-
+ 
   .calories-display {
     font-size: 32px;
     font-weight: 700;
@@ -325,27 +330,27 @@
     margin-bottom: 4px;
     letter-spacing: -0.01em;
   }
-
+ 
   .calories-label {
     font-size: 10px;
     color: #8899aa;
     letter-spacing: 0.1em;
     margin-bottom: 16px;
   }
-
+ 
   .macros-row {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 8px;
   }
-
+ 
   .macro-item {
     background: #0a0f14;
     border-radius: 2px;
     padding: 10px;
     text-align: center;
   }
-
+ 
   .macro-value {
     font-size: 18px;
     font-weight: 600;
@@ -353,24 +358,24 @@
     display: block;
     margin-bottom: 2px;
   }
-
+ 
   .macro-value.cut { color: #5BA3C9; }
   .macro-value.bulk { color: #c8a96e; }
-
+ 
   .macro-label {
     font-size: 8px;
     letter-spacing: 0.15em;
     text-transform: uppercase;
     color: #8899aa;
   }
-
+ 
   /* Weight projection block */
   .projection {
     margin-top: 16px;
     padding-top: 16px;
     border-top: 1px solid #1a2a38;
   }
-
+ 
   .projection-label {
     font-size: 9px;
     letter-spacing: 0.15em;
@@ -378,21 +383,21 @@
     color: #5BA3C9;
     margin-bottom: 10px;
   }
-
+ 
   .projection-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
     margin-bottom: 10px;
   }
-
+ 
   .projection-item {
     background: #0a0f14;
     border-radius: 2px;
     padding: 10px;
     text-align: center;
   }
-
+ 
   .projection-value {
     font-size: 16px;
     font-weight: 700;
@@ -400,23 +405,23 @@
     display: block;
     margin-bottom: 2px;
   }
-
+ 
   .projection-value.cut { color: #5BA3C9; }
   .projection-value.bulk { color: #c8a96e; }
-
+ 
   .projection-sublabel {
     font-size: 8px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: #8899aa;
   }
-
+ 
   .projection-note {
     font-size: 10px;
     color: #5f7284;
     line-height: 1.5;
   }
-
+ 
   /* Pace switch on results screen */
   .results-pace-toggle {
     display: grid;
@@ -424,7 +429,7 @@
     gap: 8px;
     margin-bottom: 16px;
   }
-
+ 
   /* CTA after results */
   .results-cta {
     background: #12202d;
@@ -434,7 +439,7 @@
     text-align: center;
     margin-top: 24px;
   }
-
+ 
   .results-cta-label {
     font-size: 9px;
     letter-spacing: 0.25em;
@@ -442,27 +447,27 @@
     color: #5BA3C9;
     margin-bottom: 8px;
   }
-
+ 
   .results-cta h3 {
     font-size: 16px;
     font-weight: 600;
     color: #ffffff;
     margin-bottom: 6px;
   }
-
+ 
   .results-cta p {
     font-size: 12px;
     color: #8899aa;
     margin-bottom: 16px;
     line-height: 1.6;
   }
-
+ 
   .cta-buttons {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
   }
-
+ 
   .cta-btn-silver {
     padding: 12px;
     background: #5BA3C9;
@@ -474,8 +479,10 @@
     letter-spacing: 0.15em;
     text-transform: uppercase;
     cursor: pointer;
+    text-decoration: none;
+    display: block;
   }
-
+ 
   .cta-btn-gold {
     padding: 12px;
     background: #c8a96e;
@@ -487,8 +494,10 @@
     letter-spacing: 0.15em;
     text-transform: uppercase;
     cursor: pointer;
+    text-decoration: none;
+    display: block;
   }
-
+ 
   .back-btn {
     display: block;
     text-align: center;
@@ -499,14 +508,21 @@
     letter-spacing: 0.1em;
     text-decoration: underline;
   }
-
+ 
   .error {
     font-size: 11px;
     color: #ff6b6b;
     margin-top: 4px;
     display: none;
   }
-
+ 
+  .privacy-note {
+    font-size: 9px;
+    color: #5f7284;
+    line-height: 1.5;
+    margin-top: 6px;
+  }
+ 
   .divider {
     height: 1px;
     background: #1a2a38;
@@ -515,7 +531,7 @@
 </style>
 </head>
 <body>
-
+ 
 <div class="header">
   <div class="logo">SNIPERS</div>
   <div class="logo-sub">HEALTH CLUB</div>
@@ -523,14 +539,19 @@
   <h1>Your Macro Blueprint</h1>
   <p>Enter your details below and get your personalised calorie and macro targets in seconds.</p>
 </div>
-
+ 
 <div class="calculator">
-
+ 
   <!-- Input Form -->
   <div class="form-card" id="formCard">
     <div class="form-section-label">Your Details</div>
     <div class="form-grid">
-
+ 
+      <div class="form-group full">
+        <label>Email</label>
+        <input type="email" id="email" placeholder="you@example.com">
+      </div>
+ 
       <div class="form-group full">
         <label>Sex</label>
         <div class="sex-toggle">
@@ -538,27 +559,27 @@
           <div class="sex-btn" id="btnFemale" onclick="setSex('female')">Female</div>
         </div>
       </div>
-
+ 
       <div class="form-group">
         <label>Age</label>
         <input type="number" id="age" placeholder="25" min="16" max="80">
       </div>
-
+ 
       <div class="form-group">
         <label>Weight (kg)</label>
         <input type="number" id="weight" placeholder="75" min="40" max="200">
       </div>
-
+ 
       <div class="form-group">
         <label>Height (cm)</label>
         <input type="number" id="height" placeholder="175" min="140" max="220">
       </div>
-
+ 
       <div class="form-group">
         <label>Body Fat % <span class="optional-tag">(Optional)</span></label>
         <input type="number" id="bodyfat" placeholder="e.g. 18" min="5" max="60">
       </div>
-
+ 
       <div class="form-group full">
         <label>Activity Level</label>
         <select id="activity">
@@ -570,7 +591,7 @@
           <option value="1.9">Extremely active (2x/day training)</option>
         </select>
       </div>
-
+ 
       <div class="form-group full">
         <label>Your Goal</label>
         <select id="goal" onchange="onGoalChange()">
@@ -580,7 +601,7 @@
           <option value="bulk">Build muscle (Bulk)</option>
         </select>
       </div>
-
+ 
       <div class="form-group full pace-group" id="paceGroup">
         <label id="paceLabel">Pace</label>
         <div class="pace-toggle" id="paceToggle">
@@ -589,70 +610,74 @@
           <div class="pace-btn" data-pace="aggressive" onclick="setPace('aggressive')">Aggressive<span class="pace-cals" id="paceCalsAggressive">500 kcal</span></div>
         </div>
       </div>
-
+ 
     </div>
-
+ 
     <div class="divider"></div>
-
-    <button class="calc-btn" onclick="calculate()">Calculate My Macros →</button>
-    <div class="error" id="errorMsg">Please fill in all fields before calculating.</div>
+ 
+    <button class="calc-btn" id="calcBtn" onclick="calculate()">Calculate My Macros →</button>
+    <div class="error" id="errorMsg">Please enter a valid email and fill in all fields before calculating.</div>
+    <div class="privacy-note">We'll email you your results and occasional tips from SHC. Unsubscribe anytime.</div>
   </div>
-
+ 
   <!-- Results -->
   <div class="results" id="results">
-
+ 
     <div class="results-header">
       <div class="results-label">Your Macro Blueprint</div>
       <div class="results-title" id="resultsName">Here are your targets</div>
     </div>
-
+ 
     <!-- Pace switch, only shown for cut/bulk -->
     <div class="pace-toggle results-pace-toggle" id="resultsPaceToggle" style="display:none;">
       <div class="pace-btn" data-pace="steady" onclick="switchResultsPace('steady')">Steady<span class="pace-cals" id="rPaceCalsSteady">300 kcal</span></div>
       <div class="pace-btn" data-pace="standard" onclick="switchResultsPace('standard')">Standard<span class="pace-cals" id="rPaceCalsStandard">400 kcal</span></div>
       <div class="pace-btn" data-pace="aggressive" onclick="switchResultsPace('aggressive')">Aggressive<span class="pace-cals" id="rPaceCalsAggressive">500 kcal</span></div>
     </div>
-
+ 
     <div class="results-grid" id="resultsGrid">
       <!-- Single result card is injected here by JS, based on selected goal -->
     </div>
-
+ 
     <!-- CTA -->
     <div class="results-cta">
       <div class="results-cta-label">Ready for the full system?</div>
       <h3>Turn your targets into a full training plan</h3>
       <p>Your macros are just the start. SHC builds your complete training and nutrition blueprint — personalised, structured, and adjusted as you progress.</p>
       <div class="cta-buttons">
-        <button class="cta-btn-silver" onclick="window.location.href='#'">Join Silver — £49/mo</button>
-        <button class="cta-btn-gold" onclick="window.location.href='#'">Join Gold — £119/mo</button>
+        <a class="cta-btn-silver" id="silverBtn" href="https://buy.stripe.com/28EcN49uf7VLeDifc2aEE00" target="_blank" rel="noopener">Join Silver — £49/mo</a>
+        <a class="cta-btn-gold" id="goldBtn" href="https://buy.stripe.com/4gM4gygWHek9an2aVMaEE02" target="_blank" rel="noopener">Join Gold — £119/mo</a>
       </div>
     </div>
-
+ 
     <span class="back-btn" onclick="resetCalc()">← Recalculate</span>
-
+ 
   </div>
-
+ 
 </div>
-
+ 
 <script>
+  // ---- CONFIG: lead capture ----
+  const ZAPIER_WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/28365110/4t6sv1e/';
+ 
   let selectedSex = 'male';
   let selectedPace = 'standard';       // used on the input form
   let resultsPace = 'standard';        // used on the results screen (can be switched live)
   let lastInputs = null;               // cached inputs so results can recompute on pace switch
-
+ 
   const PACE_CALS = { steady: 300, standard: 400, aggressive: 500 };
-
+ 
   function setSex(sex) {
     selectedSex = sex;
     document.getElementById('btnMale').classList.toggle('active', sex === 'male');
     document.getElementById('btnFemale').classList.toggle('active', sex === 'female');
   }
-
+ 
   function onGoalChange() {
     const goal = document.getElementById('goal').value;
     const paceGroup = document.getElementById('paceGroup');
     const paceLabel = document.getElementById('paceLabel');
-
+ 
     if (goal === 'cut' || goal === 'bulk') {
       paceGroup.classList.add('visible');
       paceLabel.textContent = goal === 'cut' ? 'Pace (Deficit)' : 'Pace (Surplus)';
@@ -661,13 +686,13 @@
       paceGroup.classList.remove('visible');
     }
   }
-
+ 
   function setPace(pace) {
     selectedPace = pace;
     const goal = document.getElementById('goal').value;
     styleActivePaceButtons(document.getElementById('paceToggle'), goal);
   }
-
+ 
   function styleActivePaceButtons(container, goal) {
     const activeClass = goal === 'bulk' ? 'bulk-active' : 'active';
     container.querySelectorAll('.pace-btn').forEach(btn => {
@@ -676,7 +701,11 @@
       if (isActive) btn.classList.add(activeClass);
     });
   }
-
+ 
+  function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+ 
   // kcal required per kg of bodyweight change — adjusted for leanness when body fat % is known
   function kcalPerKg(sex, bodyFat) {
     if (!bodyFat) return 7700; // standard estimate
@@ -690,8 +719,22 @@
       return 7700;
     }
   }
-
+ 
+  // Fire-and-forget lead capture — never blocks the user from seeing their results,
+  // even if the webhook is slow, down, or blocked.
+  function submitLead(email, extra) {
+    if (!ZAPIER_WEBHOOK_URL || ZAPIER_WEBHOOK_URL.indexOf('REPLACE') !== -1) return;
+    try {
+      fetch(ZAPIER_WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(Object.assign({ email: email, source: 'bronze-calculator' }, extra || {}))
+      }).catch(function () { /* silent fail — don't interrupt the user */ });
+    } catch (e) { /* silent fail */ }
+  }
+ 
   function calculate() {
+    const email = document.getElementById('email').value.trim();
     const age = parseFloat(document.getElementById('age').value);
     const weight = parseFloat(document.getElementById('weight').value);
     const height = parseFloat(document.getElementById('height').value);
@@ -699,34 +742,38 @@
     const activity = parseFloat(document.getElementById('activity').value);
     const goal = document.getElementById('goal').value;
     const errorMsg = document.getElementById('errorMsg');
-
+ 
     const needsPace = (goal === 'cut' || goal === 'bulk');
-
-    if (!age || !weight || !height || !activity || !goal) {
+ 
+    if (!isValidEmail(email) || !age || !weight || !height || !activity || !goal) {
       errorMsg.style.display = 'block';
       return;
     }
     errorMsg.style.display = 'none';
-
+ 
+    // Send the lead the moment they submit — before they ever see results,
+    // so even if they never click Join, we can follow up.
+    submitLead(email, { goal: goal, age: age, weight: weight, height: height });
+ 
     lastInputs = { age, weight, height, bodyfat, activity, goal, sex: selectedSex };
     resultsPace = needsPace ? selectedPace : 'standard';
-
+ 
     renderResults();
-
+ 
     document.getElementById('formCard').style.display = 'none';
     document.getElementById('results').classList.add('visible');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-
+ 
   function switchResultsPace(pace) {
     resultsPace = pace;
     styleActivePaceButtons(document.getElementById('resultsPaceToggle'), lastInputs.goal);
     renderResults();
   }
-
+ 
   function renderResults() {
     const { age, weight, height, bodyfat, activity, goal, sex } = lastInputs;
-
+ 
     // BMR — Katch-McArdle when body fat % is known (more accurate), else Mifflin-St Jeor
     let bmr;
     if (bodyfat) {
@@ -737,22 +784,22 @@
     } else {
       bmr = 10 * weight + 6.25 * height - 5 * age - 161;
     }
-
+ 
     const tdee = Math.round(bmr * activity);
     const needsPace = (goal === 'cut' || goal === 'bulk');
     const paceCalAmount = PACE_CALS[resultsPace];
-
+ 
     const resultsPaceToggle = document.getElementById('resultsPaceToggle');
     resultsPaceToggle.style.display = needsPace ? 'grid' : 'none';
     if (needsPace) {
       styleActivePaceButtons(resultsPaceToggle, goal);
     }
-
+ 
     const goalLabels = { cut: 'Your Cut Targets', maintain: 'Your Maintenance Targets', bulk: 'Your Bulk Targets' };
     document.getElementById('resultsName').textContent = goalLabels[goal];
-
+ 
     let targetCals, protein, fat, carbs, cardClass, cardTitle, cardSubtitle;
-
+ 
     if (goal === 'maintain') {
       targetCals = tdee;
       protein = Math.round(weight * 2.2);
@@ -778,7 +825,7 @@
       cardTitle = 'Bulk — Build Muscle';
       cardSubtitle = `+${paceCalAmount} kcal surplus · ${capitalize(resultsPace)}`;
     }
-
+ 
     let projectionHtml = '';
     if (needsPace) {
       const factor = kcalPerKg(sex, bodyfat);
@@ -789,7 +836,7 @@
       const noteTissue = bodyfat
         ? 'Estimate adjusted using your body fat % for a more tailored rate.'
         : 'General estimate. Add your body fat % above for a more tailored rate.';
-
+ 
       projectionHtml = `
         <div class="projection">
           <div class="projection-label">Projected Weight ${direction === 'loss' ? 'Loss' : 'Gain'}</div>
@@ -806,7 +853,7 @@
           <div class="projection-note">${noteTissue} Actual results vary with training, sleep, stress and consistency.</div>
         </div>`;
     }
-
+ 
     const cardHtml = `
       <div class="result-card">
         <div class="result-card-header">
@@ -833,20 +880,21 @@
           ${projectionHtml}
         </div>
       </div>`;
-
+ 
     document.getElementById('resultsGrid').innerHTML = cardHtml;
   }
-
+ 
   function capitalize(s) {
     return s.charAt(0).toUpperCase() + s.slice(1);
   }
-
+ 
   function resetCalc() {
     document.getElementById('formCard').style.display = 'block';
     document.getElementById('results').classList.remove('visible');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 </script>
-
+ 
 </body>
 </html>
+ 
